@@ -93,7 +93,7 @@ credential_scope = datestamp + '/' + region + '/' + service + '/' + 'aws4_reques
 # parameters are in the query string. Query string values must
 # be URL-encoded (space=%20). The parameters must be sorted by name.
 canonical_querystring = 'Action=AssumeRole'
-canonical_querystring += '&RoleArn='+role_arn
+canonical_querystring += '&RoleArn='+urllib.parse.quote_plus(role_arn)
 canonical_querystring += '&RoleSessionName='+session_name
 canonical_querystring += '&Version=2011-06-15'
 canonical_querystring += '&X-Amz-Algorithm=AWS4-HMAC-SHA256'
