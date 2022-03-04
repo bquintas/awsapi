@@ -26,7 +26,7 @@ import sys, os, datetime, hashlib, hmac, urllib.parse
 import requests # pip install requests
 
 # ************* REQUEST VALUES *************
-method = 'POST'
+method = 'GET'
 service = 'sts'
 host = 'sts.amazonaws.com'
 region = 'us-east-1'
