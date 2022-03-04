@@ -44,14 +44,18 @@ def getSignatureKey(key, dateStamp, regionName, serviceName):
     kSigning = sign(kService, 'aws4_request')
     return kSigning
 
-# Read AWS access key from env. variables or configuration file. Best practice is NOT
+# Read AWS access key and role details from env. variables or configuration file. Best practice is NOT
 # to embed credentials in code.
 access_key = os.environ.get('AWS_ACCESS_KEY_ID')
 secret_key = os.environ.get('AWS_SECRET_ACCESS_KEY')
 if access_key is None or secret_key is None:
     print('No access key is available.')
     sys.exit()
-
+role_arn = os.environ.get('ROLE_ARN')
+session_name = os.environ.get('SESSION_NAME') 
+if access_key is None or secret_key is None:
+    print('Role or session name not set.')
+    sys.exit()
 # Create a date for headers and the credential string
 t = datetime.datetime.utcnow()
 amz_date = t.strftime('%Y%m%dT%H%M%SZ') # Format date as YYYYMMDD'T'HHMMSS'Z'
@@ -89,8 +93,8 @@ credential_scope = datestamp + '/' + region + '/' + service + '/' + 'aws4_reques
 # parameters are in the query string. Query string values must
 # be URL-encoded (space=%20). The parameters must be sorted by name.
 canonical_querystring = 'Action=AssumeRole'
-canonical_querystring += '&RoleArn=arn:aws:iam::078127730839:role/Ec2API'
-canonical_querystring += '&RoleSessionName=Ec2API'
+canonical_querystring += '&RoleArn='+role_arn
+canonical_querystring += '&RoleSessionName='+session_name
 canonical_querystring += '&Version=2011-06-15'
 canonical_querystring += '&X-Amz-Algorithm=AWS4-HMAC-SHA256'
 canonical_querystring += '&X-Amz-Credential=' + urllib.parse.quote_plus(access_key + '/' + credential_scope)
